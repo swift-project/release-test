@@ -1,0 +1,20 @@
+name: Produce a test release
+on:
+  push:
+jobs:
+  job:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Make a file to upload
+        run: |
+          echo test > test.txt
+      - name: Create release
+        uses: swift-project/github-release@test
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ github.run_number }}.${{ github.run_attempt }}
+          commitish: ${{ github.sha }}
+          body: Test release
+          draft: true
+          gzip: folders
+          files: test.txt
